@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformador de Divisiones</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="text"], button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 18px;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="text"] {
+            background-color: #2a2a2a;
+            color: #ffffff;
+            border: 1px solid #444;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .instructions {
+            margin-bottom: 20px;
+            font-size: 16px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Transformador de Divisiones</h2>
+    <div class="instructions">
+        <p><strong>Instrucciones:</strong></p>
+        <p>Introduce un número en cualquiera de los siguientes formatos:</p>
+        <p><strong>/2, / 2, 2, 2.5, 2,5, 2'5</strong></p>
+        <p>Obtendrás como resultado la conversión de tu división en su equivalente en multiplicación.</p>
+    </div>
+    <input type="text" id="inputValue" placeholder="Escribe una división (ej: /2, 2, o 2.5, 2'5)">
+    <button onclick="transform()">Transformar</button>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    function transform() {
+        let input = document.getElementById("inputValue").value.trim();
+        let resultElement = document.getElementById("result");
+
+        // Detectar el tipo de separador de decimal: "." "," o "'"
+        let decimalSeparator = input.includes('.') ? '.' : input.includes(',') ? ',' : input.includes("'") ? "'" : null;
+
+        if (decimalSeparator) {
+            // Reemplazar separador de decimal por "." para poder hacer el cálculo
+            input = input.replace(decimalSeparator, '.');
+        }
+
+        // Eliminar posibles barras y espacios
+        input = input.replace(/^\//, '').trim();
+
+        let divisor = parseFloat(input);
+
+        if (!isNaN(divisor) && divisor !== 0) {
+            let result = 1 / divisor;
+
+            if (decimalSeparator) {
+                result = result.toString().replace('.', decimalSeparator);
+            }
+
+            resultElement.innerText = `* ${result}`;
+        } else {
+            resultElement.innerText = "Formato inválido. Usa un número válido.";
+        }
+    }
+</script>
+
+</body>
+</html>
