@@ -1,3 +1,10 @@
+<p align="center">
+  <a href="https://fer3d.github.io/transformador_division_multiplicacion/">
+    <img src="https://github.com/user-attachments/assets/fa7c0eb8-2da2-4ad5-b258-43ae074f89c7" alt="image">
+  </a>
+</p>
+
+
 # Transformador de Divisiones
 
 Este proyecto es una simple aplicación web que permite transformar divisiones en su equivalente en multiplicación. El usuario puede ingresar números en diferentes formatos, y la aplicación convierte la división a multiplicación de manera efectiva.
