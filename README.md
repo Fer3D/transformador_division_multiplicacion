@@ -4,7 +4,7 @@ Este proyecto es una simple aplicación web que permite transformar divisiones e
 
 ### Instrucciones de Uso
 
-1. Abre el archivo `index.html` en tu navegador.
+1. Abre el archivo `index.htm` en tu navegador.
 2. Introduce un número en cualquiera de los siguientes formatos:
    - `/2`, `/ 2`, `2`, `2.5`, `2,5`, `2'5`
 3. Haz clic en el botón "Transformar".
