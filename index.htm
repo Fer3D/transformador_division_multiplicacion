@@ -78,12 +78,20 @@
         <p><strong>/2, / 2, 2, 2.5, 2,5, 2'5</strong></p>
         <p>Obtendrás como resultado la conversión de tu división en su equivalente en multiplicación.</p>
     </div>
-    <input type="text" id="inputValue" placeholder="Escribe una división (ej: /2, 2, o 2.5, 2'5)">
+    <input type="text" id="inputValue" placeholder="Escribe una división (ej: /2, 2, o 2.5, 2'5)" onkeypress="checkEnter(event)">
     <button onclick="transform()">Transformar</button>
     <div class="result" id="result"></div>
 </div>
 
 <script>
+    document.getElementById("inputValue").addEventListener("keypress", checkEnter);
+
+    function checkEnter(event) {
+        if (event.key === "Enter") {
+            transform();
+        }
+    }
+
     function transform() {
         let input = document.getElementById("inputValue").value.trim();
         let resultElement = document.getElementById("result");
