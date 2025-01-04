@@ -8,13 +8,38 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             background-color: #121212;
             color: #ffffff;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
             height: 100vh;
+        }
+
+        nav {
+            background-color: #1e1e1e;
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #007bff;
+        }
+
+        nav a.active {
+            background-color: #0056b3;
         }
 
         .container {
@@ -24,6 +49,7 @@
             background-color: #1e1e1e;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            margin: 20px auto;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -55,13 +81,13 @@
             background-color: #0056b3;
         }
 
-        .result {
+        .resultado {
             margin-top: 20px;
             font-size: 20px;
             font-weight: bold;
         }
 
-        .instructions {
+        .instrucciones {
             margin-bottom: 20px;
             font-size: 16px;
             text-align: center;
@@ -70,38 +96,74 @@
 </head>
 <body>
 
-<div class="container">
-    <h2>Transformador de Divisiones</h2>
-    <div class="instructions">
+<nav>
+    <a href="#divisionAMultiplicacion" class="active" onclick="showSection('divisionAMultiplicacion')">División a Multiplicación</a>
+    <a href="#multiplicacionADivision" onclick="showSection('multiplicacionADivision')">Multiplicación a División</a>
+</nav>
+
+<div id="divisionAMultiplicacion" class="container">
+    <h2>División a Multiplicación</h2>
+    <div class="instrucciones">
         <p><strong>Instrucciones:</strong></p>
         <p>Introduce un número en cualquiera de los siguientes formatos:</p>
         <p><strong>/2, / 2, 2, 2.5, 2,5, 2'5</strong></p>
         <p>Obtendrás como resultado la conversión de tu división en su equivalente en multiplicación.</p>
     </div>
     <input type="text" id="inputValue" placeholder="Escribe una división (ej: /2, 2, o 2.5, 2'5)" onkeypress="checkEnter(event)">
-    <button onclick="transform()">Transformar</button>
-    <div class="result" id="result"></div>
+    <button onclick="transformarDivision()">Transformar</button>
+    <div class="resultado" id="resultado"></div>
+</div>
+
+<div id="multiplicacionADivision" class="container" style="display: none;">
+    <h2>Multiplicación a División</h2>
+    <div class="instrucciones">
+        <p><strong>Instrucciones:</strong></p>
+        <p>Introduce un número en cualquiera de los siguientes formatos:</p>
+        <p><strong>*2, * 2, x2, x 2, 2, 2.5, 2,5, 2'5</strong></p>
+        <p>Obtendrás como resultado la conversión de tu multiplicación en su equivalente en división.</p>
+    </div>
+    <input type="text" id="inputValueMultiplicacion" placeholder="Escribe una multiplicación (ej: *2, x2, 2, 2.5, 2,5, 2'5)" onkeypress="checkEnterMultiplicacion(event)">
+    <button onclick="transformarMultiplicacion()">Transformar</button>
+    <div class="resultado" id="resultadoMultiplicacion"></div>
 </div>
 
 <script>
-    document.getElementById("inputValue").addEventListener("keypress", checkEnter);
+    function showSection(section) {
+        document.querySelectorAll('.container').forEach(container => {
+            container.style.display = 'none';
+        });
+
+        document.getElementById(section).style.display = 'flex';
+
+        document.querySelectorAll('nav a').forEach(link => {
+            link.classList.remove('active');
+        });
+
+        document.querySelector(`nav a[href="#${section}"]`).classList.add('active');
+    }
 
     function checkEnter(event) {
         if (event.key === "Enter") {
-            transform();
+            transformarDivision();
         }
     }
 
-    function transform() {
+    function checkEnterMultiplicacion(event) {
+        if (event.key === "Enter") {
+            transformarMultiplicacion();
+        }
+    }
+
+    function transformarDivision() {
         let input = document.getElementById("inputValue").value.trim();
-        let resultElement = document.getElementById("result");
+        let elementoResultante = document.getElementById("resultado");
 
         // Detectar el tipo de separador de decimal: "." "," o "'"
-        let decimalSeparator = input.includes('.') ? '.' : input.includes(',') ? ',' : input.includes("'") ? "'" : null;
+        let separadorDecimal = input.includes('.') ? '.' : input.includes(',') ? ',' : input.includes("'") ? "'" : null;
 
-        if (decimalSeparator) {
+        if (separadorDecimal) {
             // Reemplazar separador de decimal por "." para poder hacer el cálculo
-            input = input.replace(decimalSeparator, '.');
+            input = input.replace(separadorDecimal, '.');
         }
 
         // Eliminar posibles barras y espacios
@@ -110,15 +172,43 @@
         let divisor = parseFloat(input);
 
         if (!isNaN(divisor) && divisor !== 0) {
-            let result = 1 / divisor;
+            let resultado = 1 / divisor;
 
-            if (decimalSeparator) {
-                result = result.toString().replace('.', decimalSeparator);
+            if (separadorDecimal) {
+                resultado = resultado.toString().replace('.', separadorDecimal);
             }
 
-            resultElement.innerText = `* ${result}`;
+            elementoResultante.innerText = `* ${resultado}`;
         } else {
-            resultElement.innerText = "Formato inválido. Usa un número válido.";
+            elementoResultante.innerText = "Formato inválido. Usa un número válido.";
+        }
+    }
+
+    function transformarMultiplicacion() {
+        let input = document.getElementById("inputValueMultiplicacion").value.trim();
+        let elementoResultante = document.getElementById("resultadoMultiplicacion");
+
+        let separadorDecimal = input.includes('.') ? '.' : input.includes(',') ? ',' : input.includes("'") ? "'" : null;
+
+        if (separadorDecimal) {
+            input = input.replace(separadorDecimal, '.');
+        }
+
+        // Eliminar caracteres iniciales de formato multiplicación
+        input = input.replace(/^[*x]/, '').trim();
+
+        let multiplicador = parseFloat(input);
+
+        if (!isNaN(multiplicador) && multiplicador !== 0) {
+            let resultado = 1 / multiplicador;
+
+            if (separadorDecimal) {
+                resultado = resultado.toString().replace('.', separadorDecimal);
+            }
+
+            elementoResultante.innerText = `/ ${resultado}`;
+        } else {
+            elementoResultante.innerText = "Formato inválido. Usa un número válido.";
         }
     }
 </script>
